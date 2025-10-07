@@ -68,7 +68,48 @@ $$;
 -- 3 Cursor vinculado (Descrição mais longa)
 --escreva a sua solução aqui
 
+DO 
+$$ 
+DECLARE
+    country VARCHAR(200);
+    description VARCHAR(500);  
+    longest_description VARCHAR(500);  
+    max_length INTEGER := 0;  
+    current_length INTEGER;  
+    
+    CURSOR wine_cursor IS
+        SELECT country, description
+        FROM resultados_paises
+        ORDER BY country, LENGTH(description) DESC; 
+BEGIN
+    
+    OPEN wine_cursor;
 
+    
+    LOOP
+        FETCH wine_cursor INTO country, description;
+        EXIT WHEN NOT FOUND;
+
+        current_length := LENGTH(description);
+
+        IF current_length > max_length THEN
+            longest_description := description;
+            max_length := current_length;
+        END IF;
+
+        IF NOT FOUND OR country <> country THEN
+            RAISE NOTICE 'A descrição mais longa dos vinhos no país % é: %', country, longest_description;
+            longest_description := description;
+            max_length := current_length;
+        END IF;
+
+    END LOOP;
+
+    RAISE NOTICE 'A descrição mais longa dos vinhos no país % é: %', country, longest_description;
+
+    CLOSE wine_cursor;
+END 
+$$;
 -- ----------------------------------------------------------------
 -- 4 Armazenamento dos resultados
 --escreva a sua solução aqui
