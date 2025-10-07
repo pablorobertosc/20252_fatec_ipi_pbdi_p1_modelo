@@ -113,7 +113,74 @@ $$;
 -- ----------------------------------------------------------------
 -- 4 Armazenamento dos resultados
 --escreva a sua solução aqui
+'''os resultados obtidos pelos cursores devem ser armazenados numa tabela com os seguintes campos
 
+id(chave primária, auto incremento)
+nome_pais
+preco_medio
+descricao_mais_longa'''
+
+CREATE TABLE resultados_vinhos (
+    id SERIAL PRIMARY KEY,
+    nome_pais VARCHAR(200),
+    preco_medio DECIMAL(10, 2),
+    descricao_mais_longa VARCHAR(500)
+);
+
+DO 
+$$ 
+DECLARE
+    country VARCHAR(200);
+    description VARCHAR(500);  
+    longest_description VARCHAR(500);  
+    max_length INTEGER := 0;  
+    current_length INTEGER;  
+    avg_price DECIMAL(10, 2);
+    
+    CURSOR wine_cursor IS
+        SELECT country, description
+        FROM wine
+        ORDER BY country, LENGTH(description) DESC; 
+BEGIN
+    
+    OPEN wine_cursor;
+
+    LOOP
+        FETCH wine_cursor INTO country, description;
+        EXIT WHEN NOT FOUND;
+
+        
+        current_length := LENGTH(description);
+
+     
+        IF current_length > max_length THEN
+            longest_description := description;
+            max_length := current_length;
+        END IF;
+
+        
+        SELECT AVG(price) INTO avg_price
+        FROM resultados_paises
+        WHERE country = country;
+
+      
+        IF NOT FOUND OR country <> country THEN
+            INSERT INTO resultados_vinhos (nome_pais, preco_medio, descricao_mais_longa)
+            VALUES (country, avg_price, longest_description);
+
+            
+            longest_description := description;
+            max_length := current_length;
+        END IF;
+
+    END LOOP;
+
+    INSERT INTO resultados_vinhos (nome_pais, preco_medio, descricao_mais_longa)
+    VALUES (country, avg_price, longest_description);
+
+    CLOSE wine_cursor;
+END 
+$$;
 
 -- ----------------------------------------------------------------
 -- 5 Exportação dos dados
