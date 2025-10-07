@@ -4,22 +4,22 @@
 
 
 -- ----------------------------------------------------------------
--- 2 Resultado em função da formação dos pais
+-- 2 Cursor não vinculado (cálculo de preço médio)
 --escreva a sua solução aqui
 
 
 -- ----------------------------------------------------------------
--- 3 Resultado em função dos estudos
+-- 3 Cursor vinculado (Descrição mais longa)
 --escreva a sua solução aqui
 
 
 -- ----------------------------------------------------------------
--- 4 Salário versus estudos
+-- 4 Armazenamento dos resultados
 --escreva a sua solução aqui
 
 
 -- ----------------------------------------------------------------
--- 5. Limpeza de valores NULL
+-- 5 Exportação dos dados
 --escreva a sua solução aqui
 
 -- ----------------------------------------------------------------
