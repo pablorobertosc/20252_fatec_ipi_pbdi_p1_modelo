@@ -25,7 +25,44 @@ CREATE TABLE IF NOT EXISTS resultados_paises(
 -- ----------------------------------------------------------------
 -- 2 Cursor não vinculado (cálculo de preço médio)
 --escreva a sua solução aqui
-
+DO $$
+DECLARE
+   
+    cur_preco_medio REFCURSOR;
+    
+  
+    v_country VARCHAR(100);
+    v_preco_medio NUMERIC(10,2);
+    
+BEGIN
+    
+    OPEN cur_preco_medio FOR
+        SELECT 
+            country,
+            AVG(price) AS preco_medio
+        FROM 
+            resultados_paises
+        WHERE 
+            price IS NOT NULL
+            AND country IS NOT NULL
+        GROUP BY 
+            country
+        ORDER BY 
+            country;
+    
+    RAISE NOTICE 'Preço médio por país:';
+    RAISE NOTICE '=====================';
+        
+    LOOP
+        FETCH cur_preco_medio INTO v_country, v_preco_medio;
+        EXIT WHEN NOT FOUND;
+        
+        RAISE NOTICE 'País: % | Preço Médio: R$ %', v_country, ROUND(v_preco_medio, 2);
+    END LOOP;
+    
+    CLOSE cur_preco_medio;
+END;
+$$;
 
 -- ----------------------------------------------------------------
 -- 3 Cursor vinculado (Descrição mais longa)
